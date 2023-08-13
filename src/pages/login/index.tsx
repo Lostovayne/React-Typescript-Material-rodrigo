@@ -1,5 +1,7 @@
 import { Box, Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import { FC, useState } from "react";
+import { useNotification } from "../../context/notification.context";
+import { LoginValidate } from "../../utils/validateForm";
 
 type LoginType = {
     username: string;
@@ -7,6 +9,8 @@ type LoginType = {
 };
 
 export const LoginPage: FC = () => {
+    const { getError, getSuccess } = useNotification();
+
     const [loginData, setLoginData] = useState<LoginType>({
         username: "",
         password: "",
@@ -18,8 +22,13 @@ export const LoginPage: FC = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        console.log(loginData);
+        LoginValidate.validate(loginData)
+            .then(() => {
+                getSuccess(JSON.stringify(loginData));
+            })
+            .catch((error) => {
+                getError(error.message);
+            });
     };
 
     return (
@@ -44,7 +53,6 @@ export const LoginPage: FC = () => {
                                 fullWidth
                                 label="Email"
                                 sx={{ mb: 1, mt: 2 }}
-                                required
                                 margin="normal"
                                 onChange={dataLogin}
                             />
@@ -54,7 +62,6 @@ export const LoginPage: FC = () => {
                                 fullWidth
                                 label="Password"
                                 sx={{ my: 1 }}
-                                required
                                 margin="normal"
                                 onChange={dataLogin}
                             />

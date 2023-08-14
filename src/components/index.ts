@@ -1,2 +1,3 @@
-export { Notification } from "./Notifications";
-export { HeaderComponent } from "./Header";
+export * from "./Card";
+export * from "./Header";
+export * from "./Notifications";

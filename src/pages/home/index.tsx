@@ -1,14 +1,17 @@
-import { Button, Container } from "@mui/material";
-import { FC, useEffect } from "react";
-import { HeaderComponent } from "../../components";
+import { Box, Button, Container, Grid } from "@mui/material";
+import { FC, useEffect, useState } from "react";
+import { CardComponent, HeaderComponent } from "../../components";
 import { characters } from "../../api/characters";
+import { TypeCharacter } from "./interface/character.interface";
 
 export const HomePage: FC = () => {
+    const [allcharacters, setAllCharacters] = useState<TypeCharacter[] | null>(null);
+
     useEffect(() => {
         characters
             .getAll({ page: 1 })
             .then((res) => {
-                console.log(res.data.results);
+                setAllCharacters(res.data.results);
             })
             .catch((err) => {
                 console.log(err);
@@ -26,6 +29,22 @@ export const HomePage: FC = () => {
                     </Button>
                 }
             />
+            <div>
+                {allcharacters && (
+                    <Grid container spacing={2} direction="row" sx={{ p: 6 }}>
+                        {allcharacters.map((character) => (
+                            <Grid item key={character.id} xs={3} sx={{ p: 4 }}>
+                                <CardComponent
+                                    image={character.image}
+                                    name={character.name}
+                                    species={character.species}
+                                    status={character.status}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
+                )}
+            </div>
         </Container>
     );
 };

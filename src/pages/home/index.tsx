@@ -1,8 +1,20 @@
 import { Button, Container } from "@mui/material";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { HeaderComponent } from "../../components";
+import { characters } from "../../api/characters";
 
 export const HomePage: FC = () => {
+    useEffect(() => {
+        characters
+            .getAll({ page: 1 })
+            .then((res) => {
+                console.log(res.data.results);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
     return (
         <Container maxWidth="xl">
             <HeaderComponent

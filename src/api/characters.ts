@@ -11,7 +11,7 @@ export const characters = {
         });
     },
 
-    getById: function ({ id }: { id: number }) {
+    getById: function ({ id }: { id: string | undefined }) {
         return instance.get(`${endpoint}/${id}`);
     },
 };
